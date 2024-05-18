@@ -1,0 +1,77 @@
+{% include "tickets/layout.html" %}
+
+{% load static %}
+
+{% block body %}
+    <main class="ticket-body">
+        <div id="home-body">
+            <div id="home-title">
+                Welcome {{ user.first_name|capfirst }} {{ user.last_name|capfirst }}
+            </div>
+            <div id="menu-selection">
+                <div class="home-menu-button field-border" data-url="{% url 'default_dashboard' %}" id="dashboard" onclick="redirectToDashboard()">
+                    <img class="menu-icon" src="{% static 'images/dashboard-icon.png' %}" alt="dashboard-icon">
+                    <span class="button-text">Dashboards</span>
+                </div>
+                <div class="home-menu-button field-border" id="profile" onclick="redirectToProfile()">
+                    <img class="menu-icon" src="{% static 'images/profile-icon.png' %}" alt="dashboard-icon">
+                    <span class="button-text">Profile</span>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script>
+        function redirectToDashboard(element) {
+            window.location.href = "dashboards/default_dashboard";
+        }
+
+        function redirectToProfile() {
+            fetch("/get_current_user")
+            .then(response => response.json())
+            .then(user => {
+                url = `dashboards/profile_dashboard/${user.username}`;
+                window.location.href = url;
+            })
+        }
+    </script>
+    <style>
+        #home-body {
+            margin: 150px 250px;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+        }
+
+        #home-title {
+            font-size: 30px;
+            border-bottom: 0.09em solid #278efc;
+            text-align: center;
+        }
+        #menu-selection {
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+        .button-text {
+            width: 60%;
+         }
+        .home-menu-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0px 75px;
+            width: 25vw;
+            height: 10vh;
+            margin-top: 20px;
+            cursor: pointer;
+         }
+         .home-menu-button:hover {
+            color: #278efc;
+            border: 0.09em solid #278efc;
+         }
+         .menu-icon {
+            filter: invert(48%) sepia(79%) saturate(3346%) hue-rotate(194deg) brightness(101%) contrast(98%);
+            height: 50%;
+         }
+    </style>
+{% endblock %}

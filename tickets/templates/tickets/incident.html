@@ -1,0 +1,320 @@
+{% include 'tickets/layout.html' %}
+
+{% block body %}
+    <main class="ticket-body" id="incident">
+        <form action="{% url 'update_incident' %}" method="post">
+            {% csrf_token %}
+            <div class="main-header">
+                <span style="position: absolute; left: 10px;">Incident - {{ incident.number }}</span>
+                <input type="submit" class="main-header-button field-border" id="save-button" value="Save">
+            </div>
+            <div class="error-header" id="error-header">
+                <span id="error-message" style="color: #da7a75">{{ error }}</span>
+            </div>
+            <script>
+                const error = document.getElementById("error-message");
+                if (error.innerHTML != "None") {
+                    document.getElementById("error-header").style.display = "block";
+                }
+            </script>
+            <div class="main-body-up">
+                <div style="display: flex; justify-content: space-between;">
+                    <div class="left-column">
+                        <div class="field">
+                            <label for="incident-number">Number</label>
+                            <input type="text" name="incident-number" id="incident-number" class="grey-field textfield field-border" value="{{ incident.number }}" required readonly>
+                        </div>
+                        <div class="field">
+                            <label for="caller">Caller</label>
+                            <input type="text" name="caller" id="user-input-1" class="editable textfield field-border" oninput="input_handler(this)" required autocomplete="off" value="{% if incident.caller %}{{ incident.caller.first_name }} {{ incident.caller.last_name }}{% endif %}">
+                            <div style="position: relative">
+                                <div class="results-window" id="user-window-1" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="location">Location</label>
+                            <input type="text" name="location" id="lctn-input-1" class="editable textfield field-border" oninput="input_handler(this)" required autocomplete="off" value="{% if incident.location.location %}{{ incident.location.location }}{% endif %}">
+                            <div style="position: relative;">
+                                <div class="results-window" id="lctn-window-1" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="service">Service</label>
+                            <input type="text" name="service" id="srvc-input-1" class="editable textfield field-border" oninput="input_handler(this)" required autocomplete="off" value="{% if incident.service %}{{ incident.service }}{% endif %}">
+                            <div style="position: relative;">
+                                <div class="results-window" id="srvc-window-1" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="configuration-item">Configuration item</label>
+                            <input type="text" name="configuration-item" id="conf-input-1" class="editable textfield field-border" oninput="input_handler(this)" required autocomplete="off" value="{% if incident.configuration_item %}{{ incident.configuration_item }}{% endif %}">
+                            <div style="position: relative;">
+                                <div class="results-window" id="conf-window-1" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="right-column">
+                        <div class="field">
+                            <label for="state">State</label>
+                            <select name="state" id="state" class="editable select textfield field-border" required>
+                                {% for state in states %}
+                                    <option value="{{ state.state }}" id="{{ state.state }}">
+                                        {{ state.state|capfirst }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="opened">Opened on</label>
+                            <input type="text" name="opened" id="opened" class="grey-field textfield field-border" value="{{ incident.opened_on }}" readonly>
+                        </div>
+                        <div class="field">
+                            <label for="priority">Priority</label>
+                            <select name="priority" id="priority" class="editable textfield select field-border" required>
+                                <option>
+                                </option>
+                                {% for priority in priorities %}
+                                    <option value="{{ priority.code }}" id="{{ priority.code }}">
+                                        {{ priority.code }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="assignment-group">Assignment group</label>
+                            <input type="text" name="assignment-group" id="team-input-1" class="editable textfield field-border" oninput="input_handler(this)" required autocomplete="off" value="{% if incident.assignment_group %}{{ incident.assignment_group }}{% endif %}">
+                            <div style="position: relative">
+                                <div class="results-window" id="team-window-1" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="assigned">Assigned to</label>
+                            <select name="assignee" id="assignee" class="editable textfield field-border" required>
+                                <option></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="whole-column">
+                    <div class="field long-field">
+                        <div style="display: inline-block;"><label for="short-description">Short description</label></div>
+                        <textarea name="short-description" id="short-description" rows="2" class="editable field-border" required autocomplete="off">{% if incident.short_description %}{{ incident.short_description }}{% endif %}</textarea>
+                    </div>
+                    <div class="field long-field">
+                        <div style="display: inline-block;"><label for="description">Description</label></div>
+                        <textarea name="description" id="description" rows="5" class="editable field-border" required autocomplete="off">{% if incident.description %}{{ incident.description }}{% endif %}</textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="main-body-down">
+                <div class="selection-tab-buttons">
+                        <div class="selection-button notes" id="work-notes-button" style="border-top-left-radius: 5px; background-color : white; border-top : 4px solid #278efc" onclick="switchTab(this.id)">Notes</div><!--
+                    --><div class="selection-button resolution-information" id="resolution-information-button" style="border-right: 2px solid #cecece; border-top-right-radius: 5px;" onclick="switchTab(this.id)">Resolution Information</div>
+                </div>
+                <!-- LAYOUTS -->
+                <div class="section-border">
+    
+                    <div class="notes-tab notes selection-content" id="work-notes-content">
+                        <div class="field long-field">
+                            <div><label for="confidential-notes">Confidential Notes</label></div>
+                            <textarea name="confidential-notes" id="confidential-notes" rows="2" class="editable field-border" autocomplete="off">{% if incident.confidential_notes %}{{ incident.confidential_notes }}{% endif %}</textarea>
+                        </div>
+                        <div class="field long-field">
+                            <div><label for="work-notes">Work Notes</label></div>
+                            <textarea name="work-notes" id="work-notes" rows="3" class="editable field-border" style="background-color: #fafad2;" autocomplete="off"></textarea>
+                        </div>
+                        <div style="margin-bottom: 50px; width: 100%; display: flex; justify-content: flex-end; align-items: center;">
+                            <button type="button" id="post-button" class="main-button field-border" style="margin-left: 10px;" onclick="postWorkNote(this)">Post</button>
+                        </div>
+                        {%for note in notes%}
+                            <div class="field long-field">
+                                <div><label></label></div>
+                                <div class="note-field field-border">
+                                    <div class="note-header">
+                                        <span>{{ note.author.first_name|capfirst }} {{ note.author.last_name|capfirst }}</span>
+                                        <span>{{ note.created_on }}</span>
+                                    </div>
+                                    <div class="note-content">
+                                        {{ note.content }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+    
+                    <div class="notes-tab resolution-information selection-content" id="resolution-information-content" style="display: none;">
+                        <div style="display: flex; justify-content: space-between;">
+                            <div class="left-column">
+                                <div class="field">
+                                    <label for="resolved-on">Resolved on</label>
+                                    <input type="text" name="resolved-on" id="resolved-on" class="grey-field textfield field-border" value="{% if incident.resolved_on %}{{ incident.resolved_on }}{% endif %}" readonly>
+                                </div>
+                            </div>
+                            <div class="right-column">
+                                <div class="field">
+                                    <label for="resolved-by">Resolved by</label>
+                                    <input type="text" name="resolved-by" id="user-input-3" class="editable textfield field-border" oninput="input_handler(this)" value="{% if incident.resolved_by %}{{ incident.resolved_by.first_name }} {{ incident.resolved_by.last_name }}{% endif %}" autocomplete="off">
+                                    <div style="position: relative">
+                                        <div class="results-window" id="user-window-3" style="display: none;">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="whole-column" style="margin-top: 10px;">
+                            <div class="field long-field">
+                                <div style="display: inline-block;"><label for="resolution-notes">Resolution notes</label></div>
+                                <textarea name="resolution-notes" id="resolution-notes" rows="4" class="editable field-border" autocomplete="off">{% if incident.resolution_notes %}{{ incident.resolution_notes }}{% endif %}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </main>
+    <script>
+        const number = document.getElementById("incident-number").value;
+
+        function populateAssignee() {
+            const assignmentGroup = document.getElementById('team-input-1').value;
+            console.log(assignmentGroup)
+            if (assignmentGroup.length > 0) {
+                const assigneeSelect = document.getElementById('assignee');
+                return fetch(`../entry/get_assignees/${assignmentGroup}`)
+                    .then(response => response.json())
+                    .then(assignees => {
+                        for (let i = 0; i < assignees.length; i++) {
+                            let node = document.createElement('option');
+                            let assigneeFullName = assignees[i].fields.first_name + ' ' + assignees[i].fields.last_name;
+                            node.id = assignees[i].fields.username;
+                            node.value = assigneeFullName;
+                            node.innerHTML = assigneeFullName;
+                            assigneeSelect.appendChild(node);
+                        }
+                    });
+            } else {
+                return Promise.resolve();
+            }
+        }
+
+        populateAssignee().then(() => {
+            fetch(`/incident/${number}/data`)
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById(`${data['state']}`).selected = true;
+                if (data['state'] != "New") {
+                    document.getElementById("New").disabled = true;
+                }
+                if (data['priority'] != "None") {
+                    document.getElementById(`${data['priority']}`).selected = true;
+                }
+                if (data['assignee'] != "None") {
+                    document.getElementById(`${data['assignee']}`).selected = true;
+                }
+
+                // Resolving logic
+                let state = document.getElementById("state")
+                state.onchange = () => {
+                    if (state.value === "Resolved") {
+                        switchTab("resolution-information-button");
+                        document.getElementById("resolution-notes").required = true;
+                        fetch("/get_current_user")
+                        .then(response => response.json())
+                        .then(user => {
+                            document.getElementById("user-input-3").value = user["full_name"];
+                        })
+                    }
+                    else {
+                        document.getElementById("resolution-notes").required = false;
+                        document.getElementById("user-input-3").value = '';
+                    }
+                }
+
+                // disabling editing if resolved
+                if (state.value === "Resolved") {
+                    const editableElements = document.querySelectorAll(".editable");
+                    editableElements.forEach((element) => {
+                        console.log(element.tagName)
+                        element.classList.add("grey-field");
+                        if (element.tagName.toLowerCase() === "select") {
+                            element.disabled = true;
+                        }
+                        else {
+                            element.readOnly = true;
+                        }
+                        document.getElementById('save-button').disabled = true;
+                        document.getElementById('post-button').disabled = true
+                    })
+                }
+            });
+        });
+
+        // post work note
+        function postWorkNote(button) {
+            let workNotesTextarea = document.getElementById("work-notes");
+            if (workNotesTextarea.value.length > 0) {
+                    fetch(`${number}/work_notes`, {
+                    method: "PUT",
+                    body: workNotesTextarea.value
+                })
+                .then(() => {
+                    workNotesTextarea.value = '';
+                    location.reload();
+                })
+            }
+            else {
+                workNotesTextarea.style.border = "2px solid red";
+            }
+        }
+
+        let selectedElement = 'work-notes';
+        const tabStyles = {
+            "standardStyle" : {
+                "backgroundColor" : "#e6e9eb",
+                "borderTop" : "4px solid #cecece",
+            },
+            "selectedStyle" : {
+                "backgroundColor" : "white",
+                "borderTop" : "4px solid #278efc",
+            }
+        }
+
+        function applyStyle(element, style) {
+            for (var key in style) {
+                if (key === "backgroundColor") {
+                    element.style.backgroundColor = style[key];
+                }
+                else if (key === "borderTop") {
+                    element.style.borderTop = style[key];
+                }
+            }
+        }
+
+        function switchTab(elementToSelect) {
+
+            elementToSelect = elementToSelect.slice(0, -7);
+            if (elementToSelect != selectedElement) {
+                // old elements
+                oldButton = document.getElementById(selectedElement + "-button");
+                oldContent = document.getElementById(selectedElement + "-content");
+
+                // new elements
+                newButton = document.getElementById(elementToSelect + "-button");
+                newContent = document.getElementById(elementToSelect + "-content");
+
+                // swap
+                applyStyle(oldButton, tabStyles['standardStyle']);
+                applyStyle(newButton, tabStyles['selectedStyle']);
+                oldContent.style.display = "none"
+                newContent.style.display = "block";
+                selectedElement = elementToSelect
+            }
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% include 'tickets/layout.html' %}
+
+{% block body %}
+    <main class="ticket-body">
+        <div class="entity-body">
+            <div class="central-long-section">
+                <div class="section-border entity-body padding-top-bottom margin-bottom">
+                    <div class="header-title">
+                        <div><span class="entry-key">Owner: </span><span class="entry-value">{{ ci.owner.username }}</span></div>
+                        <div><span class="entry-key">Model: </span><span class="entry-value">{{ ci.model }}</span></div>
+                        <div><span class="entry-key">OS: </span><span class="entry-value">{{ ci.operating_system }}</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

@@ -1,0 +1,22 @@
+.entry-title {
+    margin-top: 100px;
+    margin-bottom: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: red;
+}
+
+form {
+    margin-top: 50px;
+}
+
+.button-field {
+    margin-top: 25px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+td {
+    padding: 10px 20px;
+}

@@ -1,0 +1,47 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Login</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'tickets/style.css' %}">
+    </head>
+    <body>
+        <div>
+            <form action="{% url 'login' %}" method="POST">
+                {% csrf_token %}
+                <div>
+                    <input class="field-border" type="text" name="username" placeholder="Identifier" required>
+                </div>
+                <div>
+                    <input class="field-border" type="password" name="password" placeholder="Password" required>
+                </div>
+                <div>
+                    <button class="main-button field-border">Sign In</button>
+                </div>
+            </form>
+        </div>
+        <div style="text-align: center;">
+            <p style="color:red; margin-top: 25px;">{{ error }}</p>
+            <p style="margin-top: 25px;">Username:CS501000 | Password:admin1234</p>
+        </div>
+    </body>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        form {
+            margin-top: 150px;
+        }
+        input {
+            margin-bottom: 25px;
+            width: 200px;
+        }
+    </style>
+</html>

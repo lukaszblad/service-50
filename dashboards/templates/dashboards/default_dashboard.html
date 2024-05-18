@@ -1,0 +1,71 @@
+{% include 'tickets/layout.html' %}
+
+{% block body %}
+    <main class="ticket-body">
+        <div class="dashboard-body">
+            <div class="assigned-to-me section-entire">
+                <div class="section-header">
+                    <div class="header-border"><span class="header-title">Active Tickets Assigned to Me</span></div>
+                </div>
+                <div class="section-body section-border">
+                    <div class="section-row section-border" style="font-weight: bold;">
+                        <span class="section-element"><p class="element-text">Number</p></span>
+                        <span class="section-element"><p class="element-text">Opened on</p></span>
+                        <span class="section-element"><p class="element-text">State</p></span>
+                        <span class="section-element"><p class="element-text">Short description</p></span>
+                        <span class="section-element"><p class="element-text">Assignment group</p></span>
+                        <span class="section-element"><p class="element-text">Assigned to</p></span>
+                    </div>
+                    {% if assigned_incidents %}
+                        {% for assigned_incident in assigned_incidents %}
+                            <div class="section-row ticket-row section-border">
+                                <span class="section-element"><p class="element-text incident-number" onclick="redirectToIncident(this)">{{ assigned_incident.number }}</p></span>
+                                <span class="section-element"><p class="element-text">{{ assigned_incident.opened_on }}</p></span>
+                                <span class="section-element"><p class="element-text">{{ assigned_incident.state }}</p></span>
+                                <span class="section-element"><p class="element-text">{{ assigned_incident.short_description }}</p></span>
+                                <span class="section-element"><p class="element-text">{{ assigned_incident.assignment_group }}</p></span>
+                                <span class="section-element"><p class="element-text">{{ assigned_incident.assigned_to.first_name }} {{ assigned_incident.assigned_to.last_name }}</p></span>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="no-record">
+                            <p>No records to display</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="assigned-to-me section-entire">
+                <div class="section-header">
+                    <div class="header-border"><span class="header-title">Tickets Resolved by Me</span></div>
+                </div>
+                <div class="section-body section-border">
+                    <div class="section-row section-border" style="font-weight: bold;">
+                        <span class="section-element"><p class="element-text">Number</p></span>
+                        <span class="section-element"><p class="element-text">Opened on</p></span>
+                        <span class="section-element"><p class="element-text">State</p></span>
+                        <span class="section-element"><p class="element-text">Short description</p></span>
+                        <span class="section-element"><p class="element-text">Assignment group</p></span>
+                        <span class="section-element"><p class="element-text">Assigned to</p></span>
+                    </div>
+                    {% if resolved_incidents %}
+                        {% for resolved_incident in resolved_incidents %}
+                            <div class="section-row ticket-row section-border">
+                                <span class="section-element"><p class="element-text incident-number" onclick="redirectToIncident(this)">{{ resolved_incident.number }}</p></span>
+                                <span class="section-element"><p class="element-text">{{ resolved_incident.opened_on }}</p></span>
+                                <span class="section-element"><p class="element-text">{{ resolved_incident.state }}</p></span>
+                                <span class="section-element"><p class="element-text">{{ resolved_incident.short_description }}</p></span>
+                                <span class="section-element"><p class="element-text">{{ resolved_incident.assignment_group }}</p></span>
+                                <span class="section-element"><p class="element-text">{{ resolved_incident.resolved_by.first_name }} {{ resolved_incident.resolved_by.last_name }}</p></span>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                            <div class="no-record">
+                                <p>No records to display</p>
+                            </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

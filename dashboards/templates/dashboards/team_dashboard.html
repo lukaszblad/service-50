@@ -1,0 +1,40 @@
+{% include 'tickets/layout.html' %}
+
+{% block body %}
+    <main class="ticket-body">
+        <div class="entity-body">
+            <div class="central-long-section">
+                <div class="section-border entity-body padding-top-bottom margin-bottom">
+                    <span class="section-title">{{ team.code }}</span>
+                    <div class="header-title">
+                        <div><span class="entry-key">Manager: </span><span class="entry-value">{{ team.manager.first_name }} {{ team.manager.last_name }}</span></div>
+                    </div>
+                </div>
+                <div class="section-border margin-bottom">
+                    <div class="grey-title">Members</div>
+                    <div>
+                        {% if members %}
+                            {% for member in members %}
+                                <div class="incident-number" style="margin:10px 10px;" onclick="redirectToUser(this)">{{ member.username }}</div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="no-record"><p>No records to display</p></div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="section-border margin-bottom">
+                    <div class="grey-title">Active incidents</div>
+                    <div>
+                        {% if active_incidents %}
+                            {% for active_incident in active_incidents %}
+                                <div class="incident-number" style="margin:10px 10px;" onclick="redirectToIncident(this)">{{ active_incident.number }}</div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="no-record"><p>No records to display</p></div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

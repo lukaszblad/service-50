@@ -1,0 +1,24 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Service50</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="{% static 'codes/style.css' %}">
+        <link rel="stylesheet" href="{% static 'tickets/style.css' %}">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.png' %}" >
+    </head>
+    <body>
+        <header class="green-element">
+            <div id="title"style="cursor: pointer;">
+                <a href="{% url 'index' %}" style="text-decoration: none; color: white;">Service5<span style="color:#5b8072; font-weight: bold;">0</span></a>
+            </div>
+        </header>
+        {% block body %}
+        {% endblock %}
+        <script src="{% static 'scripts/userSearch.js' %}"></script>
+    </body>
+</html>

@@ -1,0 +1,42 @@
+{% include 'tickets/layout.html' %}
+
+{% block body %}
+    <main class="ticket-body">
+        <div class="entity-body">
+            <div class="central-long-section">
+                <div class="section-border entity-body padding-top-bottom margin-bottom">
+                    <span class="section-title">{{ profile_owner.first_name }} {{ profile_owner.last_name }}</span>
+                    <div class="header-title">
+                        <div><span class="entry-key">Username: </span><span class="entry-value">{{ profile_owner.username }}</span></div>
+                        <div><span class="entry-key">E-mail: </span><span class="entry-value">{{ profile_owner.email }}</span></div>
+                        <div><span class="entry-key">Role: </span><span class="entry-value">{{ profile_owner.role }}</span></div>
+                    </div>
+                </div>
+                <div class="section-border margin-bottom">
+                    <div class="grey-title">Configuration Items</div>
+                    <div>
+                        {% if user_cis %}
+                            {% for ci in user_cis %}
+                                <div class="incident-number" style="margin: 10px 10px;" onclick="redirectToCI(this)">{{ ci.code }}</div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="no-record"><p>No records to display</p></div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="section-border margin-bottom">
+                    <div class="grey-title">Teams</div>
+                    <div>
+                        {% if user_teams %}
+                            {% for team in user_teams %}
+                                <div class="incident-number" style="margin:10px 10px;" onclick="redirectToTeam(this)">{{ team.code }}</div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="no-record"><p>No records to display</p></div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

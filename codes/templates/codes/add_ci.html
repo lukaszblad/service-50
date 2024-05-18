@@ -1,0 +1,59 @@
+{% include 'tickets/layout.html' %}
+
+{% block body %}
+    <main class="ticket-body">
+        <main class="entity-body">
+            <div class="central-long-section">
+                <div class="section-border entity-body padding-top-bottom margin-bottom">
+                    <span class="section-title">Create Configuration Item</span>
+                </div>
+                <div class="form-central">
+                    <form action="{% url 'add_ci' %}" method="post">
+                        {% csrf_token %}
+                        <div class="field">
+                            <label for="model">Model</label>
+                            <select name="model" id="model" class="textfield field-border" required>
+                                <option value="NULL">--None--</option>
+                                {% for model in models %}
+                                    <option value="{{ model.name }}">{{ model.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="operating_system">OS</label>
+                            <select name="operating_system" id="operating_system" class="textfield field-border" required>
+                                <option value="NULL">--None--</option>
+                                {% for os in oss %}
+                                    <option value="{{ os.specification }}">{{ os.specification }}</option>s
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="owner">Owner</label>
+                            <input type="text" name="owner" id="user-input-1" class="textfield field-border" oninput="input_handler(this)" required>
+                            <div style="position: relative">
+                                <div class="results-window" id="user-window-1" style="display: none; margin-right: 8px;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label for="location">Location</label>
+                            <select name="location" id="location" class="textfield field-border" required>
+                                <option value="NULL">--None--</option>
+                                {% for location in locations %}
+                                    <option value="{{ location.code }}">{{ location.location }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="field" style="display: flex; justify-content: center;">
+                            <span style="color:red; font-size: large;">{{ error }}</span>
+                        </div>
+                        <div class="button-field">
+                            <input type="submit" name="submit" id="submit" class="main-button field-border" value="Submit">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </main>
+{% endblock %}

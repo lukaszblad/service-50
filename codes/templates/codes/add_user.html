@@ -1,0 +1,68 @@
+{% include 'tickets/layout.html' %}
+
+{% block body %}
+    <main class="ticket-body">
+        <main class="entity-body">
+            <div class="central-long-section">
+                <div class="section-border entity-body padding-top-bottom margin-bottom">
+                    <span class="section-title">Create User</span>
+                </div>
+                <div class="form-central">
+                    <form action="{% url 'add_user' %}" method="post">
+                        {% csrf_token %}
+                        <div class="field">
+                            <label for="first_name">First name</label>
+                            <input type="text" name="first_name" id="first_name" class="textfield field-border" required autocomplete="off">
+                        </div>
+                        <div class="field">
+                            <label for="last_name">Last name</label>
+                            <input type="text" name="last_name" id="last_name" class="textfield field-border" required autocomplete="off">
+                        </div>
+                        <div class="field">
+                            <label for="location">Location</label>
+                            <select name="location" id="location" class="textfield field-border" required>
+                                <option value="NULL">--None--</option>
+                                {% for location in locations %}
+                                    <option value="{{ location.code }}">{{ location.location }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="role">Role</label>
+                            <select name="role" id="role" class="textfield field-border" required autocomplete="off">
+                                <option value=""></option>
+                                {% for role in roles %}
+                                    <option value="{{ role.role }}">{{ role.role }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="password">Password</label>
+                            <input type="password" name="password" id="password" class="textfield field-border" required autocomplete="off" oninput="checkPassword()">
+                        </div>
+                        <div class="field">
+                            <label for="repeat-password">Repeat password</label>
+                            <input type="password" name="repeat-password" id="repeat-password" class="textfield field-border" required autocomplete="off" oninput="checkPassword()">
+                        </div>
+                        <div class="field">
+                            <span style="color: #da7a75">{{ error }}</span>
+                        </div>
+                        <div class="button-field">
+                            <input type="submit" name="submit" id="submit" class="main-button field-border" value="Submit" disabled>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+        <script>
+            // password check
+            function checkPassword() {
+                const password = document.getElementById("password").value;
+                const repeatedpassword = document.getElementById('repeat-password').value;
+                if (password.length > 7 && password === repeatedpassword) {
+                    document.getElementById("submit").disabled = false;
+                }
+            }
+        </script>
+    </main>
+{% endblock %}

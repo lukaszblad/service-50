@@ -1,0 +1,23 @@
+{% include 'tickets/layout.html' %}
+
+{% block body %}
+    <main class="ticket-body">
+        <main  class="entity-body">
+            <div class="central-long-section">
+                <div class="entity-body padding-top-bottom margin-bottom">
+                    <span class="section-title">Entry Added!</span>
+                </div>
+                <div class="form-central">
+                    <table>
+                        {% for key, value in entries.items %}
+                            <tr class="field-border">
+                                <td>{{ key|capfirst  }}</td>
+                                <td style="border-left: 0.09em solid #cecece; background-color: #e6e9eb;">{{ value }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </main>
+    </main>
+{% endblock %}

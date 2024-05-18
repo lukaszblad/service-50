@@ -1,0 +1,25 @@
+Green
+medium #293e40
+dark #213234
+ultradark #1d2c2d
+light #5b8072
+shiny: #82c9b8
+mediumdark #233537
+
+Light Gray:
+light: #f1f3f4
+medium: #e6e9eb
+dark: #cecece
+
+Dark Gray
+dark: #101010
+
+Yellow
+#fafad2
+
+Blue
+#278efc
+
+Red
+light: #ffdadc
+dark: #da7a75

@@ -1,0 +1,85 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Service50</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="{% static 'tickets/style.css' %}">
+        <link rel="stylesheet" href="{% static 'dashboards/style.css' %}">
+        <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.png' %}" >
+        <script src="{% static 'tickets/lateralPanel.js' %}"></script>
+    </head>
+    <body>
+        <header class="green-element">
+            <div id="title"style="cursor: pointer;">
+                <a href="{% url 'index' %}" style="text-decoration: none; color: white;">Service5<span style="color:#5b8072; font-weight: bold;">0</span></a>
+            </div>
+            <div style="position: absolute; right: 10px; display: flex; justify-content: flex-end; width: 400px;">
+                <div id="user-dropdown-button" onclick="logout()">
+                    Logout
+                </div>
+                <style>
+                    #user-dropdown-button {
+                        display: inline-block;
+                        margin-right: 20px;
+                        cursor: pointer;
+                    }
+                    #user-dropdown-button:hover {
+                        background-color: #213234;
+                    }
+                </style>
+                <script>
+                    function openDropdown(element) {
+                        element.style.backgroundColor = "#213234";
+                        document.getElementById("user-dropdown").style.display = "block";
+                    }
+                    function logout() {
+                        window.location.href = "../logout";
+                    }
+                </script>
+                <form action="{% url 'default_search' %}" method="post" style="display: inline-block">
+                    {% csrf_token %}
+                    <input type="text" name="search" placeholder="Search" class="rounded-input" style="padding-left: 5px;">
+                </form>
+            </div>
+        </header>
+        <div id="lateral-panel" class="green-element">
+            <div id="panel-buttons">
+                <div id="catalog-content" style="display: block;">
+                    <a href="{% url 'default_dashboard' %}" class="lateral-link">
+                        <div class="lateral-button">
+                            Default dashboard
+                        </div>
+                    </a>
+                    <a href="{% url 'new_incident' %}" class="lateral-link">
+                        <div class="lateral-button">
+                            Create New Incident
+                        </div>
+                    </a>
+                    {% if user.role.role == 'manager' %}
+                        <a href="{% url 'add_ci' %}" class="lateral-link">
+                            <div class="lateral-button">
+                                Create Configuration Item
+                            </div>
+                        </a>
+                        <a href="{% url 'add_user' %}" class="lateral-link">
+                            <div class="lateral-button">
+                                Create User
+                            </div>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div>
+                <div id="collapse-panel" class="green-element">&#8249</div>
+            </div>
+        </div>
+        {% block body %}
+        {% endblock %}
+        <script src="{% static 'scripts/userSearch.js' %}"></script>
+        <script src="{% static 'scripts/redirect.js' %}"></script>
+    </body>
+</html>
